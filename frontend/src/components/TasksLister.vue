@@ -101,7 +101,7 @@ export default {
       this.id = null;
       this.editor = false;
       fetch(
-        'http://localhost:8000/tasks?search=' +
+        '/tasks?search=' +
           this.search +
           '&limit=' +
           this.limit +
@@ -125,7 +125,7 @@ export default {
       this.dataAccessError = true;
     },
     finish(task) {
-      fetch('http://localhost:8000/tasks?_id=' + task._id, {
+      fetch('/tasks?_id=' + task._id, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     add() {
-      fetch('http://localhost:8000/tasks', {
+      fetch('/tasks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(this.task),
@@ -80,7 +80,7 @@ export default {
         .catch((err) => this.$emit('dataAccessFailed', err.message));
     },
     getPeopleItems() {
-      fetch(`http://localhost:8000/peopleFromProject?projectId=${this.task.project}`, { method: 'GET' })
+      fetch(`/peopleFromProject?projectId=${this.task.project}`, { method: 'GET' })
         .then((response) => response.json())
         .then((data) => {
           this.people = data.map((person) => ({ value: person._id, title: person.firstName + ' ' + person.lastName }));
@@ -96,7 +96,7 @@ export default {
     },
     removeReal() {
       this.confirmation = false;
-      fetch('http://localhost:8000/tasks?_id=' + this.id, { method: 'DELETE' })
+      fetch('/tasks?_id=' + this.id, { method: 'DELETE' })
         .then((res) => res.json())
         .then((data) => {
           if (data.error) throw new Error(data.error);
@@ -105,7 +105,7 @@ export default {
         .catch((err) => this.$emit('dataAccessFailed', err.message));
     },
     modify() {
-      fetch('http://localhost:8000/tasks?_id=' + this.id, {
+      fetch('/tasks?_id=' + this.id, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(this.task),
@@ -136,7 +136,7 @@ export default {
       .catch((err) => this.$emit('dataAccessFailed', err.message));
 
     if (this.id) {
-      fetch('http://localhost:8000/tasks?_id=' + this.id, { method: 'GET' })
+      fetch('/tasks?_id=' + this.id, { method: 'GET' })
         .then((res) => res.json())
         .then((data) => {
           if (data.error) throw new Error(data.error);

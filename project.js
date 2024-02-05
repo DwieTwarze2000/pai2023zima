@@ -10,7 +10,8 @@ const schema = new mongoose.Schema({
     coords: {
         lat: { type: Number, required: false },
         lng: { type: Number, required: false }    
-    }
+    },
+    manager: { type: mongoose.ObjectId, required: false, default: null },
 }, {
     versionKey: false,
     additionalProperties: false
@@ -57,7 +58,17 @@ module.exports = {
                     foreignField: 'projects',
                     as: 'members'
                 }},
-                { $set: { members: { $size: '$members' }}}
+                { $set: { members: { $size: '$members' }}},
+                {
+                    $lookup: {
+                        from: 'people',
+                        localField: 'manager',
+                        foreignField: '_id',
+                        as: 'manager'
+                    }
+                },
+                { $addFields: { manager: { $arrayElemAt: [ '$manager', 0 ]}}},
+
             ]
             model.aggregate(aggregation)
             .then(data => {

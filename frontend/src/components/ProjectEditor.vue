@@ -10,7 +10,7 @@
             <v-color-picker mode="rgb" v-model="project.color" hide-canvas hide-inputs></v-color-picker>
           </div>
           <v-text-field variant="solo" type="date" label="Start date" v-model="project.startDate" :rules="[rules.validStartDate]"></v-text-field>
-
+          <v-select v-model="project.manager" label="Manager" :items="people"></v-select>
           <div class="flex-container">
             <v-btn variant="text" size="xx-small" rounded="false" icon="mdi-image-filter-center-focus" @click="centerView"></v-btn>
             Location (click or drag to set)
@@ -113,6 +113,16 @@ export default {
       this.center = this.project.coords;
       this.$refs.vmap.map.flyTo(this.center);
     },
+    getPeopleItems() {
+      if (this.id) {
+        fetch(`/peopleFromProject?projectId=${this.id}`, { method: 'GET' })
+          .then((response) => response.json())
+          .then((data) => {
+            this.people = data.map((person) => ({ value: person._id, title: person.firstName + ' ' + person.lastName }));
+          })
+          .catch((err) => this.$emit('dataAccessFailed', err.message));
+      }
+    },
   },
   data() {
     return {
@@ -129,9 +139,11 @@ export default {
       dialog: false,
       confirmation: false,
       ready: false,
+      people: []
     };
   },
   mounted() {
+    this.getPeopleItems();
     if (this.id) {
       fetch('/project?_id=' + this.id, { method: 'GET' })
         .then((res) => res.json())

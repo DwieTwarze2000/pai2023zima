@@ -32,6 +32,9 @@
               <th class="text-left">
                 Members
               </th>
+              <th class="text-left">
+                Manager
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -40,6 +43,9 @@
               <td><v-chip :color="project.color">{{ project.shortcut }}</v-chip></td>
               <td>{{ new Date(project.startDate).toLocaleDateString() }}</td>
               <td>{{ project.members }}</td>
+              <td>
+                <v-chip v-if="project.manager" :color="'#32612D'">{{ project.manager.firstName }} {{ project.manager.lastName }}</v-chip>
+              </td>
             </tr>
           </tbody>
         </v-table>
